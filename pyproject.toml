@@ -1,0 +1,9 @@
+[project]
+name = "krypt"
+version = "0.1.0"
+description = "An end-to-end encrypted messaging application."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pylint>=4.0.4",
+]
