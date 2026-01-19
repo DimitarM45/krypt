@@ -10,11 +10,11 @@ class RegisterUserRequest(BaseModel):
     username: str = Field(max_length=100)
     email: EmailStr
     password: SecretStr = Field(min_length=8, max_length=100)
+    public_message_key: str
 
     @field_validator("password")
-    @classmethod
     def validate_password(
-        cls: type["RegisterUserRequest"], value: SecretStr
+        self, value: SecretStr
     ) -> SecretStr:
         password: str = value.get_secret_value()
 
