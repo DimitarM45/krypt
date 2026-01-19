@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from krypt.src.auth_server.routers.auth.models.register_user_request import RegisterUserRequest
-from krypt.src.dals.models.user import User
+from krypt.auth_server.routers.auth.models.register_user_request import RegisterUserRequest
+from krypt.dals.models.user import User
 
 
 class AbstractUserRepository(ABC):

@@ -1,10 +1,11 @@
 [project]
 name = "krypt"
 version = "0.1.0"
-description = "Add your description here"
+description = "Krypt is an end-to-end encrypted messaging app with a TUI."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "alembic>=1.18.1",
     "fastapi[standard]>=0.128.0",
     "psycopg2>=2.9.11",
     "sqlalchemy>=2.0.45",

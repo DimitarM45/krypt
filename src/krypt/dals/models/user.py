@@ -1,8 +1,11 @@
-from sqlalchemy import UUID, String
-from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
+from uuid import UUID
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
+from .base import Base
 
 
-class User(DeclarativeBase):
+class User(Base):
     __tablename__ = "users"
 
     id: Mapped[UUID] = mapped_column(
