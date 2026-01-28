@@ -4,15 +4,13 @@ Contains the main implementation of the AbstractUserService.
 
 from typing import Optional
 from fastapi import Depends
-from krypt.src.auth_server.dependencies.repositories import get_user_repository
-from krypt.src.auth_server.routers.auth.models.register_user_request import (
-    RegisterUserRequest,
-)
-from krypt.src.auth_server.services import AbstractUserService
-from krypt.src.auth_server.services.models import UserDTO
-from krypt.src.dals.abstract_user_repository import AbstractUserRepository
-from krypt.src.dals.models.user import User
 
+from krypt.auth_server.dependencies.repositories import get_user_repository
+from krypt.auth_server.routers.auth.models.register_user_request import RegisterUserRequest
+from krypt.auth_server.services.abstract_user_service import AbstractUserService
+from krypt.auth_server.services.models.user_dto import UserDTO
+from krypt.dals.abstract_user_repository import AbstractUserRepository
+from krypt.dals.models.user import User
 
 class UserService(AbstractUserService):
     """

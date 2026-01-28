@@ -1,16 +1,13 @@
-from typing import Union
-
 from fastapi import FastAPI
-
-from auth_server.routers.user import user
-from auth_server.routers.auth import auth
+from krypt.auth_server.routers.auth import auth
+from krypt.auth_server.routers.user import user
 
 
 app: FastAPI = FastAPI()
 
 
-app.include_router(user.user_router, prefix="users")
-app.include_router(auth.auth_router, prefix="auth")
+app.include_router(user.user_router, prefix="/users")
+app.include_router(auth.auth_router, prefix="/auth")
 
 
 @app.get("/")

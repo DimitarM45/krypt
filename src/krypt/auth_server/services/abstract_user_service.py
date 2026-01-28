@@ -1,10 +1,10 @@
 from typing import Optional
 from abc import ABC, abstractmethod
 
-from krypt.src.auth_server.routers.auth.models.register_user_request import (
+from krypt.auth_server.routers.auth.models.register_user_request import (
     RegisterUserRequest,
 )
-from krypt.src.auth_server.services.models.user_dto import UserDTO
+from krypt.auth_server.services.models.user_dto import UserDTO
 
 
 class AbstractUserService(ABC):
