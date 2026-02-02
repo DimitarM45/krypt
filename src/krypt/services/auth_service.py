@@ -4,16 +4,17 @@ import jwt
 from pwdlib import PasswordHash
 from krypt.auth_server.routers.auth.models.token import Token
 from krypt.configuration import Configuration
+from krypt.services.abstract_crypto_service import AbstractCryptoService
 from . import AbstractAuthService
 
 
 class AuthService(AbstractAuthService):
     def __init__(
         self,
-        hash_service: PasswordHash,
+        crypto_service: AbstractCryptoService,
         config: Configuration,
     ) -> None:
-        self._hash_service: PasswordHash = hash_service
+        self._crypto_service: AbstractCryptoService = crypto_service
         self._config = config
 
     def create_access_token(
@@ -34,7 +35,7 @@ class AuthService(AbstractAuthService):
         return Token(access_token=encoded_token, token_type=token_type)
 
     def get_password_hash(self, password: str) -> str:
-        return self._hash_service.hash(password)
+        return self._crypto_service.hash(password)
 
     def verify_password_hash(self, plain_password: str, hashed_password: str) -> bool:
-        return self._hash_service.verify(plain_password, hashed_password)
+        return self._crypto_service.verify(plain_password, hashed_password)

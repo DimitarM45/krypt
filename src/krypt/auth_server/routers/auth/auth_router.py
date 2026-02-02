@@ -53,7 +53,7 @@ async def get_access_token(
         raise credentials_exception
 
     is_password_correct: bool = auth_service.verify_password_hash(
-        form_data.password, user.password_hash)
+        form_data.password, user.password_hash
     )
 
     if not is_password_correct:

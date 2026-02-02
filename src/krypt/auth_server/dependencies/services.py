@@ -1,20 +1,31 @@
 from fastapi import Depends
+from krypt.services.abstract_auth_service import AbstractAuthService
 from pwdlib import PasswordHash
 from krypt.auth_server.dependencies.repositories import get_user_repository
 from krypt.configuration import Configuration
+from krypt.services.abstract_crypto_service import AbstractCryptoService
+from krypt.services.abstract_user_service import AbstractUserService
 from krypt.services.auth_service import AuthService
+from krypt.services.crypto_service import CryptoService
 from krypt.services.user_service import UserService
 from krypt.dals.abstract_user_repository import AbstractUserRepository
 
 
-def get_user_service(
-    user_repo: AbstractUserRepository = Depends(get_user_repository)
-) -> UserService:
-    return UserService(user_repo)
+def get_crypto_service(
+    hash_service: PasswordHash = Depends(PasswordHash.recommended),
+) -> AbstractCryptoService:
+    return CryptoService(hash_service)
 
 
 def get_auth_service(
-    hash_service: PasswordHash = Depends(PasswordHash.recommended),
-    config: Configuration = Depends(Configuration)
-) -> AuthService:
-    return AuthService(hash_service, config)
+    crypto_service: AbstractCryptoService = Depends(get_crypto_service),
+    config: Configuration = Depends(Configuration),
+) -> AbstractAuthService:
+    return AuthService(crypto_service, config)
+
+
+def get_user_service(
+    user_repo: AbstractUserRepository = Depends(get_user_repository),
+    auth_service: AbstractAuthService = Depends(get_auth_service),
+) -> AbstractUserService:
+    return UserService(user_repo, auth_service)

@@ -2,13 +2,12 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from uuid import UUID
 
-from krypt.auth_server.routers.auth.models.register_user_request import RegisterUserRequest
 from krypt.dals.models.user import User
 
 
 class AbstractUserRepository(ABC):
     @abstractmethod
-    async def create_user(self, user_data: RegisterUserRequest) -> UUID:
+    async def create_user(self, user: User) -> UUID:
         pass
 
     @abstractmethod
@@ -21,4 +20,8 @@ class AbstractUserRepository(ABC):
 
     @abstractmethod
     async def remove_user_by_id(self, user_id: str) -> bool:
+        pass
+
+    @abstractmethod
+    async def user_exists(self, username: str) -> bool:
         pass
