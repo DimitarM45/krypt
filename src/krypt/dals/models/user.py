@@ -15,5 +15,7 @@ class User(Base):
 
     first_name: Mapped[Optional[str]] = mapped_column(String(30))
     last_name: Mapped[Optional[str]] = mapped_column(String(30))
-    username: Mapped[Optional[str]] = mapped_column(String(30))
+    username: Mapped[Optional[str]] = mapped_column(String(30), unique=True)
+    password_hash: Mapped[Optional[str]] = mapped_column(String(100))
+    password_salt: Mapped[Optional[str]] = mapped_column(String(100))
     public_message_key: Mapped[Optional[str]] = mapped_column()

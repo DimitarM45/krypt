@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
 )
-from krypt.auth_server.configuration import config
+from krypt.configuration import config
 
 engine: AsyncEngine = create_async_engine(config.db_connection_string, echo=True)
 
