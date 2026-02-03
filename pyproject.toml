@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.18.1",
     "asyncpg>=0.31.0",
+    "cryptography>=46.0.4",
     "fastapi[standard]>=0.128.0",
     "psycopg2>=2.9.11",
     "pwdlib[argon2]>=0.3.0",
@@ -14,6 +15,8 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "rich>=14.2.0",
     "sqlalchemy>=2.0.45",
+    "terminaltexteffects>=0.14.2",
+    "textual>=7.5.0",
 ]
 
 [tool.setuptools.packages.find]

@@ -23,5 +23,5 @@ class AbstractUserRepository(ABC):
         pass
 
     @abstractmethod
-    async def user_exists(self, username: str) -> bool:
+    async def user_exists(self, username: str, email: str) -> bool:
         pass

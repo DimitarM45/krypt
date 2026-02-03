@@ -1,5 +1,7 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class CryptoKeyPair(BaseModel):
-    public_key: 
+@dataclass
+class CryptoKeyPair:
+    public_key: bytes
+    private_key: bytes

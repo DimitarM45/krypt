@@ -1,8 +1,7 @@
-from dataclasses import dataclass
-
 from pydantic import BaseModel, EmailStr, Field, SecretStr, field_validator
 
 from krypt.auth_server.routers.auth.models.validation_constants import (
+    EMAIL_MAX_LENGTH,
     FIRST_NAME_MAX_LENGTH,
     LAST_NAME_MAX_LENGTH,
     PASSWORD_MAX_LENGTH,
@@ -11,16 +10,15 @@ from krypt.auth_server.routers.auth.models.validation_constants import (
 )
 
 
-@dataclass
 class RegisterUserRequest(BaseModel):
     first_name: str = Field(max_length=FIRST_NAME_MAX_LENGTH)
     last_name: str = Field(max_length=LAST_NAME_MAX_LENGTH)
     username: str = Field(max_length=USERNAME_MAX_LENGTH)
-    email: EmailStr
+    public_message_key: str = Field()
+    email: EmailStr = Field(max_length=EMAIL_MAX_LENGTH)
     password: SecretStr = Field(
         min_length=PASSWORD_MIN_LENGTH, max_length=PASSWORD_MAX_LENGTH
     )
-    public_message_key: str
 
     @classmethod
     @field_validator("password")

@@ -47,7 +47,7 @@ class UserRepository(AbstractUserRepository):
         user.username = None
         user.public_message_key = None
         user.password_hash = None
-        user.password_salt = None
+        user.email = None
         user.deleted_at = datetime.now()
 
         await self._db.commit()
@@ -61,7 +61,7 @@ class UserRepository(AbstractUserRepository):
 
         return result.scalar_one_or_none()
 
-    async def user_exists(self, username: str) -> bool:
-        statement = select(User.id).where(User.username == username)
+    async def user_exists(self, username: str, email: str) -> bool:
+        statement = select(User.id).where(User.username == username or User.email == email)
 
         return (await self._db.execute(statement)).first() is not None

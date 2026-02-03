@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from pwdlib import PasswordHash
 from krypt.auth_server.routers.auth.models.token import Token
 from krypt.configuration import Configuration
 from krypt.services.abstract_crypto_service import AbstractCryptoService
@@ -33,9 +32,3 @@ class AuthService(AbstractAuthService):
         )
 
         return Token(access_token=encoded_token, token_type=token_type)
-
-    def get_password_hash(self, password: str) -> str:
-        return self._crypto_service.hash(password)
-
-    def verify_password_hash(self, plain_password: str, hashed_password: str) -> bool:
-        return self._crypto_service.verify(plain_password, hashed_password)
