@@ -1,13 +1,8 @@
-from typing import Any
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric.dh import generate_parameters
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-
 from fastapi import Depends
 from krypt.services.abstract_auth_service import AbstractAuthService
 from pwdlib import PasswordHash
 from krypt.auth_server.dependencies.repositories import get_user_repository
-from krypt.configuration import Configuration
+from krypt.configuration import Configuration, get_config
 from krypt.services.abstract_crypto_service import AbstractCryptoService
 from krypt.services.abstract_user_service import AbstractUserService
 from krypt.services.auth_service import AuthService
@@ -31,7 +26,7 @@ def get_crypto_service(
 
 def get_auth_service(
     crypto_service: AbstractCryptoService = Depends(get_crypto_service),
-    config: Configuration = Depends(Configuration),
+    config: Configuration = Depends(get_config),
 ) -> AbstractAuthService:
     return AuthService(crypto_service, config)
 

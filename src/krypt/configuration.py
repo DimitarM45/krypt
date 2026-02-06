@@ -5,7 +5,7 @@ Loads the auth server .env configuration model.
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-_BASE_PROJECT_DIR: Path = Path(__file__).parent.parent.parent.parent
+_BASE_PROJECT_DIR: Path = Path(__file__).parent.parent.parent
 _ENV_FILE_PATH = _BASE_PROJECT_DIR / ".env"
 
 
@@ -22,4 +22,5 @@ class Configuration(BaseSettings):
     model_config = SettingsConfigDict(env_file=_ENV_FILE_PATH)
 
 
-config: Configuration = Configuration()
+def get_config() -> Configuration:
+    return Configuration()

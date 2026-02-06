@@ -4,7 +4,9 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
 )
-from krypt.configuration import config
+from krypt.configuration import Configuration, get_config
+
+config: Configuration = get_config()
 
 engine: AsyncEngine = create_async_engine(config.db_connection_string, echo=True)
 

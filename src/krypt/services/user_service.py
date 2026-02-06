@@ -43,7 +43,7 @@ class UserService(AbstractUserService):
         return db_model_to_dto(user, UserDTO)
 
     async def create_user(self, user_data: RegisterUserRequest) -> Optional[str]:
-        if self._user_repository.user_exists(user_data.username, user_data.email):
+        if await self._user_repository.user_exists(user_data.username, user_data.email):
             return None
 
         user: User = User()

@@ -4,11 +4,15 @@ from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
-from krypt.auth_server.dependencies.services import get_auth_service, get_crypto_service, get_user_service
+from krypt.auth_server.dependencies.services import (
+    get_auth_service,
+    get_crypto_service,
+    get_user_service,
+)
 from krypt.auth_server.routers.auth.models.register_user_request import (
     RegisterUserRequest,
 )
-from krypt.configuration import Configuration
+from krypt.configuration import Configuration, get_config
 from krypt.services.abstract_auth_service import AbstractAuthService
 from krypt.services.abstract_crypto_service import AbstractCryptoService
 from krypt.services.abstract_user_service import AbstractUserService
@@ -22,6 +26,7 @@ UserServiceDependency = Annotated[AbstractUserService, Depends(get_user_service)
 AuthServiceDependency = Annotated[AbstractAuthService, Depends(get_auth_service)]
 CryptoServiceDependency = Annotated[AbstractCryptoService, Depends(get_crypto_service)]
 
+
 @auth_router.post("/register", status_code=201)
 async def register_user(
     request: RegisterUserRequest,
@@ -32,7 +37,7 @@ async def register_user(
     if not user_id:
         raise HTTPException(409, "User could not be created!")
 
-    return user_id
+    return {"user_id": user_id}
 
 
 @auth_router.post("/token", status_code=201, response_model=Token)
@@ -41,7 +46,7 @@ async def get_access_token(
     crypto_service: CryptoServiceDependency,
     auth_service: AuthServiceDependency,
     user_service: UserServiceDependency,
-    config: Configuration = Depends(Configuration),
+    config: Configuration = Depends(get_config),
 ):
     user: Optional[AuthUserDTO] = await user_service.get_auth_user(form_data.username)
 
