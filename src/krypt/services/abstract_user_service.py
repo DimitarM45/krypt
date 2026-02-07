@@ -4,8 +4,9 @@ from abc import ABC, abstractmethod
 from krypt.auth_server.routers.auth.models.register_user_request import (
     RegisterUserRequest,
 )
-from krypt.services.models.user_dto import UserDTO
 from krypt.services.models.auth_user_dto import AuthUserDTO
+from krypt.services.models.user_dto import UserDTO
+
 
 class AbstractUserService(ABC):
     @abstractmethod

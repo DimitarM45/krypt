@@ -1,6 +1,6 @@
 import asyncio
 import base64
-from encodings.base64_codec import base64_encode
+from typing import Optional
 import aiohttp
 
 from pathlib import Path
@@ -8,7 +8,6 @@ from pathlib import Path
 from argparse import ArgumentParser, Namespace
 
 from pwdlib import PasswordHash
-from pydantic import SecretStr
 from rich.text import Text
 from rich.prompt import Prompt
 from rich.console import Console
@@ -20,11 +19,26 @@ from krypt.services.crypto_service import CryptoService
 from krypt.services.models.crypto_key_pair import CryptoKeyPair
 
 
-async def handle_login():
-    pass
+async def handle_login() -> Optional[str]:
+    username: str = Prompt.ask(
+        "[yellow bold underline]username[/yellow bold underline]"
+    )
+    password: str = Prompt.ask(
+        "[yellow bold underline]password[/yellow bold underline]", password=True
+    )
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            AUTH_SERVER_URL + "/token",
+            data={"username": username, "password": password},
+        ) as response:
+            if response.status == 201:
+                return (await response.json())["access_token"]
+            else:
+                return None
 
 
-async def handle_register():
+async def handle_register() -> bool:
     first_name: str = Prompt.ask(
         "[yellow bold underline]first name[/yellow bold underline]"
     )
@@ -45,7 +59,7 @@ async def handle_register():
 
     async with aiohttp.ClientSession() as session:
         async with session.post(
-            "http://localhost:8000/auth/register",
+            AUTH_SERVER_URL + "/register",
             json={
                 "first_name": first_name,
                 "last_name": last_name,
@@ -55,7 +69,16 @@ async def handle_register():
                 "public_message_key": base64.b64encode(key_pair.public_key).decode(),
             },
         ) as response:
-            print(await response.json())
+            if response.status == 201:
+                rich_console.print("[green bold]Success![/green bold]")
+
+                return True
+            else:
+                rich_console.print(
+                    "[red bold]A user with the same email/username already exists![/red bold]"
+                )
+
+                return False
 
 
 def render_startup_animation(text: str) -> None:
@@ -69,7 +92,7 @@ def render_startup_animation(text: str) -> None:
             terminal.print(frame)
 
 
-async def run_auth_flow():
+async def run_auth_flow() -> Optional[str]:
     arg_parser: ArgumentParser = ArgumentParser()
 
     arg_parser.add_argument(
@@ -103,10 +126,15 @@ async def run_auth_flow():
         show_default=False,
     )
 
-    if startup_action == "l":
-        await handle_login()
-    elif startup_action == "r":
-        await handle_register()
+    if startup_action == "l" or startup_action == "login":
+        return await handle_login()
+    elif startup_action == "r" or startup_action == "register":
+        if not await handle_register():
+            return None
+
+        rich_console.print("[green bold]Login:[/green bold]")
+
+        return await handle_login()
 
 
 async def run_websocket_client():
@@ -117,7 +145,18 @@ async def run_tui_app():
     pass
 
 
-if __name__ == "main":
+async def main():
+    access_token: Optional[str] = await run_auth_flow()
+
+    if not access_token:
+        rich_console.print("[red bold]AUTHENTICATION FAILED[/red bold]")
+
+        return
+
+    
+
+if __name__ == "__main__":
+    AUTH_SERVER_URL = "http://localhost:8000/auth"
     rich_console: Console = Console()
 
-    asyncio.run(run_auth_flow())
+    asyncio.run(main())

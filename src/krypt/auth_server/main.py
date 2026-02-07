@@ -1,13 +1,13 @@
 from fastapi import FastAPI
-from krypt.auth_server.routers.auth import auth_router
-from krypt.auth_server.routers.user import user_router
+from krypt.auth_server.routers.auth.auth_router import auth_router
+from krypt.auth_server.routers.user.user_router import user_router
 
 
 app: FastAPI = FastAPI()
 
 
-app.include_router(user_router.user_router)
-app.include_router(auth_router.auth_router)
+app.include_router(user_router)
+app.include_router(auth_router)
 
 
 @app.get("/")

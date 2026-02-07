@@ -11,3 +11,4 @@ wheels/
 
 # Environment vairables
 .env
+.vscode/launch.json
